@@ -1,20 +1,32 @@
 #include <RF24.h>
 
-//***** Definição dos Pinos *********
-#define pinCE  9
-#define pinCSN 10
+//***** Definição dos Pinos *****************************************************
+#define pinCE  9                                                                //
+#define pinCSN 10                                                               //
+                                                                                //
+#define MOTOR1PWM 6                                                             //
+#define MOTOR1_1 3                                                              //
+#define MOTOR1_2 2                                                              //
+#define MOTOR2PWM 5                                                             //
+#define MOTOR2_1  4                                                             //
+#define MOTOR2_2  7                                                             //
+#define TEMPO_DELAY 250                                                         //
+                                                                                //
+const int VALOR_PWM_1= 180 ;                                                    //
+const int VALOR_PWM_2= 180 * 0.78;                                              //
+/*o valor de 78% da capacidade de um motor                                      //
+ * escolhido acima pode variar de acordo com as condições da bateria            //
+ * e das peças usadas. Faça os testes necessárias para redefinir esse valor     //
+ * de acordo com as suas condições.                                             //
+ */                                                                             //
+/*===============================================================================*/
 
-#define MOTOR1PWM 6
-#define MOTOR1_1 3
-#define MOTOR1_2 2
-#define MOTOR2PWM 5
-#define MOTOR2_1  4
-#define MOTOR2_2  7
-#define TEMPO_DELAY 250
 
-const int VALOR_PWM_1= 180 ;
-const int VALOR_PWM_2= 180 * 0.78;
 
+/*========= Estrutura definida para controlar o estado de movimento do robô=========================
+* Dendendo do estado do robô, as variáveis(ligando, frente, re, direita, esquerda) serão ativadas  *|
+* ou seja, a variável recebera o valor de TRUE                                                     *|
+|*=================================================================================================*/
 typedef struct estruturaDadosRF
 {
    boolean ligando = false;
@@ -23,15 +35,16 @@ typedef struct estruturaDadosRF
    boolean direita = false;
    boolean esquerda = false;
    int tempoqueeleanda;
-   //unsigned short t_latitude;
 }tipoDadosRF;
 
 
-
+// Instânciando objeto da classe tipoDadosRF. (classe definida na biblioteca <RF24.h>)
 tipoDadosRF dadosRF;
 
+// Inicializando o radio passando como parâmetro os pinos "pinCE" e "pinCSN" conectados no arduino
 RF24 radio(pinCE,pinCSN);
 
+// constante pré-definida necessária para a comunicação a rádio
 const uint64_t pipeOut = 0xE8E8F0F0E1LL;
 
 void limpar(){
